@@ -1,5 +1,6 @@
 import pygame
 import player
+import bullet
 
 FPS=60
 WINDOW_SIZE_X=800
@@ -24,8 +25,8 @@ def main():
             if event.type == pygame.QUIT:
                 going = False
         screen.blit(background_image,background_size)
-        player.move_player(player1, delta, WINDOW_SIZE_X)
-        player.draw_player(screen, player1)
+        player.player_update(player1, delta, screen, WINDOW_SIZE_X)
+
         pygame.display.flip()
     pygame.quit()
 
