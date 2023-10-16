@@ -9,6 +9,8 @@ def create_player():
         'right': pygame.image.load('assets/ship/playerShipRight.png'),
         'left': pygame.image.load('assets/ship/playerShipLeft.png'),
         'idle': pygame.image.load('assets/ship/playerShip.png'),
+        'lives': 3,
+        'score': 0,
         'bullets':[],
         'bullet_cooldown': 0,
         'x':400-50,
@@ -43,10 +45,18 @@ def move_player(player, delta, size_x):
     if not moved:
         player['sprites'] = player['idle']
 
-def player_update(player, delta, screen, size_x):
+def player_update(player, delta, screen, size_x, enemies):
     move_player(player, delta, size_x)
     draw_player(screen, player)
     player['bullets'] = [bullet_object for bullet_object in player['bullets'] if bullet_object['y'] > -30]
     for bullet_object in player['bullets']:
         bullet.move_bullet(bullet_object, delta)
         bullet.draw_bullet(screen, bullet_object)
+
+        # Check for collisions with enemies
+        for enemy in enemies:
+            if pygame.Rect(bullet_object['x'], bullet_object['y'], 9, 37).colliderect(pygame.Rect(enemy['x'], enemy['y'], 100, 100)):
+                player['score'] += 100
+                enemies.remove(enemy)
+                player['bullets'].remove(bullet_object)
+                break
