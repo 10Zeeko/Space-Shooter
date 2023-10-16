@@ -1,11 +1,10 @@
-import pygame
+# Game essential 
+from cons import *
+
+# Game Objects
 import player
 import enemy
 import hud
-
-FPS=60
-WINDOW_SIZE_X=800
-WINDOW_SIZE_Y=800
 
 def main():
     # Game
@@ -34,7 +33,7 @@ def main():
             if event.type == pygame.QUIT:
                 going = False
         screen.blit(background_image,background_size)
-        player.player_update(player1, delta, screen, WINDOW_SIZE_X, enemies)
+        player.player_update(player1, delta, screen, enemies)
 
         # Spawn enemies
         now = pygame.time.get_ticks()
@@ -45,8 +44,7 @@ def main():
         
         # Update and draw enemies
         for enemy_object in enemies:
-            enemy.move_enemy(enemy_object, delta)
-            enemy.draw_enemy(screen, enemy_object)
+            enemy.enemy_update(enemy_object, delta, screen)
         
         hud.draw_hud(screen, player1)
         

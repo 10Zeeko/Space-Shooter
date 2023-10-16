@@ -1,14 +1,11 @@
-import pygame
+from cons import *
 import bullet
-
-PLAYER_VEL = 0.4
-BULLET_COOLDOWN = 400
 
 def create_player():
     player = {
-        'right': pygame.image.load('assets/ship/playerShipRight.png'),
-        'left': pygame.image.load('assets/ship/playerShipLeft.png'),
-        'idle': pygame.image.load('assets/ship/playerShip.png'),
+        'right': PLAYER_RIGHT,
+        'left': PLAYER_LEFT,
+        'idle': PLAYER_IDLE,
         'lives': 3,
         'score': 0,
         'bullets':[],
@@ -17,6 +14,7 @@ def create_player():
         'y':800-76
     }
     player['sprites'] = player['idle']
+    player['hitbox'] = pygame.Rect(player['x'] + 35, player['y'] + 5, 29, 95)
     return player
 
 def draw_player(screen, player):
@@ -24,7 +22,11 @@ def draw_player(screen, player):
     square = sprite.get_rect().move(player['x'], player['y'])
     screen.blit(sprite, square)
 
-def move_player(player, delta, size_x):
+    # Draw player hitbox for debugging
+    if debug:
+        pygame.draw.rect(screen, (255, 0, 0), player['hitbox'], 2)  # Red rectangle
+
+def move_player(player, delta):
     moved = False
     vel = int(PLAYER_VEL*delta)
     keys = pygame.key.get_pressed()
@@ -32,8 +34,8 @@ def move_player(player, delta, size_x):
         player['x'] = max(player['x'] - vel, 0)
         player['sprites'] = player['left']
         moved = True
-    if keys[pygame.K_RIGHT] and player['x']<size_x-100:
-        player['x']=min(player['x']+vel, size_x-50)
+    if keys[pygame.K_RIGHT] and player['x']< WINDOW_SIZE_X -100:
+        player['x']=min(player['x']+vel, WINDOW_SIZE_X-50)
         player['sprites']=player['right']
         moved=True
     if keys[pygame.K_SPACE]:
@@ -42,21 +44,34 @@ def move_player(player, delta, size_x):
             player['bullet_cooldown'] = pygame.time.get_ticks()
             player_bullet = bullet.create_bullet(player['x'], player['y'])
             player['bullets'].append(player_bullet)
+    if keys[pygame.K_p]:
+        debug = False
     if not moved:
         player['sprites'] = player['idle']
 
-def player_update(player, delta, screen, size_x, enemies):
-    move_player(player, delta, size_x)
+    # Update the hitbox position to move with the player
+    player['hitbox'].topleft = (player['x'] + 35, player['y'] + 5)
+
+def player_update(player, delta, screen, enemies):
+    move_player(player, delta)
     draw_player(screen, player)
+
+    # Check player collisions with enemies
+    player_rect = player['hitbox']  # PlayerHitBox 29 x 95
+    for enemy in enemies:
+        enemy_rect = pygame.Rect(enemy['x'], enemy['y'], 93, 84)  # assuming the enemy's size is 100x100
+        if player_rect.colliderect(enemy_rect):
+            player['lives'] -= 1
+            enemies.remove(enemy)
+            if player['lives'] == 0:
+                break  # Player has no lives left
+
+    # Update bullet position and check collisions
     player['bullets'] = [bullet_object for bullet_object in player['bullets'] if bullet_object['y'] > -30]
     for bullet_object in player['bullets']:
-        bullet.move_bullet(bullet_object, delta)
-        bullet.draw_bullet(screen, bullet_object)
+        check_coll = bullet.update_bullets(bullet_object, delta, screen, enemies)
+        if check_coll:
+            player['score'] += 100
+            player['bullets'].remove(bullet_object)
 
-        # Check for collisions with enemies
-        for enemy in enemies:
-            if pygame.Rect(bullet_object['x'], bullet_object['y'], 9, 37).colliderect(pygame.Rect(enemy['x'], enemy['y'], 100, 100)):
-                player['score'] += 100
-                enemies.remove(enemy)
-                player['bullets'].remove(bullet_object)
-                break
+    return True # Player is still alive

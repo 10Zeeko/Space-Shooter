@@ -1,7 +1,5 @@
 import pygame
-
-SCORE_TEXT_SIZE = 12
-LIVES_TEXT_SIZE = 12
+from cons import *
 
 def draw_text(screen, text, size, x, y):
     font = pygame.font.Font('assets/font/Kenney Space.ttf', size)
