@@ -1,6 +1,5 @@
 import pygame
 
-debug = True
 '''
 Game Window Constants
 '''

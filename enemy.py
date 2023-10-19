@@ -1,4 +1,5 @@
 from cons import *
+import debug
 
 def create_enemy():
     enemy = {
@@ -14,8 +15,9 @@ def draw_enemy(screen, enemy):
     square = sprite.get_rect().move(enemy['x'], enemy['y'])
     screen.blit(sprite, square)
 
+    global debug_toggle
     # Draw enemy hitbox for debugging
-    if debug:
+    if debug.debug_toggle:
         pygame.draw.rect(screen, (0, 0, 255), enemy['hitbox'], 2)  # Blue rectangle
 
 def move_enemy(enemy, delta):

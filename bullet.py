@@ -1,4 +1,5 @@
 from cons import *
+import debug
 
 def create_bullet(x, y):
     bullet = {
@@ -10,12 +11,13 @@ def create_bullet(x, y):
     return bullet
 
 def draw_bullet(screen, bullet):
+    global debug_toggle
     sprite = bullet['sprite']
     square = sprite.get_rect().move(bullet['x'], bullet['y'])
     screen.blit(sprite, square)
 
     # Draw bullet hitbox for debugging
-    if debug:
+    if debug.debug_toggle:
         pygame.draw.rect(screen, (255, 255, 0), bullet['hitbox'], 2)  # Yellow rectangle
 
 def move_bullet(bullet, delta):

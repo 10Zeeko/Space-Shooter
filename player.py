@@ -1,5 +1,7 @@
 from cons import *
 import bullet
+import debug
+
 
 def create_player():
     player = {
@@ -23,7 +25,7 @@ def draw_player(screen, player):
     screen.blit(sprite, square)
 
     # Draw player hitbox for debugging
-    if debug:
+    if debug.debug_toggle:
         pygame.draw.rect(screen, (255, 0, 0), player['hitbox'], 2)  # Red rectangle
 
 def move_player(player, delta):
@@ -45,7 +47,8 @@ def move_player(player, delta):
             player_bullet = bullet.create_bullet(player['x'], player['y'])
             player['bullets'].append(player_bullet)
     if keys[pygame.K_p]:
-        debug = False
+        global debug
+        debug.debug_toggle = not debug.debug_toggle
     if not moved:
         player['sprites'] = player['idle']
 
