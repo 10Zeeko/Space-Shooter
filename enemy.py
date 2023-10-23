@@ -1,14 +1,19 @@
 from cons import *
 import debug
 
-def create_enemy():
+def create_enemy(enemy_type, x, y):
+    if enemy_type not in ENEMY_SPRITES:
+        return None
+    sprite = ENEMY_SPRITES[enemy_type]
     enemy = {
-        'sprite': ENEMY_IDLE,
-        'x': 400-50,
-        'y': 0
+        'sprite': sprite,
+        'x': x - 40,
+        'y': y - 350
     }
-    enemy['hitbox'] = pygame.Rect(enemy['x'], enemy['y'], 93, 84)
+    # Set hitbox size based on sprite size
+    enemy['hitbox'] = sprite.get_rect(topleft=(enemy['x'], enemy['y']))
     return enemy
+
 
 def draw_enemy(screen, enemy):
     sprite = enemy['sprite']

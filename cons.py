@@ -38,7 +38,12 @@ BULLET_SPRITE = pygame.image.load('assets/bullets/playerBullet.png')
 Enemy Constants
 '''
 # Enemy properties
-ENEMY_VEL = 0.2 
+ENEMY_VEL = 0.1
 
 # Enemy sprite
-ENEMY_IDLE = pygame.image.load('assets/enemy/enemyShip.png')
+ENEMY_SPRITES = {
+    0: pygame.image.load('assets/enemy/enemyCommon.png'),
+    1: pygame.image.load('assets/enemy/enemyDoubleLaser.png'),
+    2: pygame.image.load('assets/enemy/enemyCrossedLaser.png'),
+    3: pygame.image.load('assets/enemy/enemyFast.png')
+}
