@@ -1,6 +1,7 @@
 from cons import *
 import bullet
 import debug
+import input_manager
 
 
 def create_player():
@@ -32,21 +33,22 @@ def move_player(player, delta):
     moved = False
     vel = int(PLAYER_VEL*delta)
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_LEFT] and player['x']>0:
+    inputs = input_manager
+    if inputs.left_input(keys) and player['x']>0:
         player['x'] = max(player['x'] - vel, 0)
         player['sprites'] = player['left']
         moved = True
-    if keys[pygame.K_RIGHT] and player['x']< WINDOW_SIZE_X -100:
+    if inputs.right_input(keys) and player['x']< WINDOW_SIZE_X -100:
         player['x']=min(player['x']+vel, WINDOW_SIZE_X-50)
         player['sprites']=player['right']
         moved=True
-    if keys[pygame.K_SPACE]:
+    if inputs.shoot_input(keys):
         now = pygame.time.get_ticks()
         if now - player['bullet_cooldown'] >= BULLET_COOLDOWN:
             player['bullet_cooldown'] = pygame.time.get_ticks()
             player_bullet = bullet.create_bullet(player['x'], player['y'])
             player['bullets'].append(player_bullet)
-    if keys[pygame.K_p]:
+    if inputs.debug_input(keys):
         global debug
         debug.debug_toggle = not debug.debug_toggle
     if not moved:
