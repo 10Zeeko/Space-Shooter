@@ -1,4 +1,5 @@
 import pygame
+import time
 
 '''
 Game Window Constants
