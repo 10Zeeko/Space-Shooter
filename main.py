@@ -1,11 +1,11 @@
 # Game essential 
-from cons import *
-from enemy_waves import *
+from scripts.game_config.cons import *
+from scripts.enemy.enemy_waves import *
 
 # Game Objects
-import player
-import enemy
-import hud
+from scripts.player import player
+from scripts.enemy import enemy
+from scripts.hud import hud
 
 def init_game():
     pygame.init()

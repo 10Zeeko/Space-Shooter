@@ -1,5 +1,5 @@
 import pygame
-from cons import *
+from ..game_config.cons import *
 
 def draw_text(screen, text, size, x, y):
     font = pygame.font.Font('assets/font/Kenney Space.ttf', size)

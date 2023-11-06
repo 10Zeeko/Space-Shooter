@@ -1,7 +1,8 @@
-from cons import *
-import bullet
-import debug
-import input_manager
+from ..game_config.cons import *
+from . import bullet
+from ..game_config.debug import debug_toggle
+from ..game_config.input_manager import *
+
 
 
 def create_player():
@@ -26,29 +27,28 @@ def draw_player(screen, player):
     screen.blit(sprite, square)
 
     # Draw player hitbox for debugging
-    if debug.debug_toggle:
+    if debug_toggle:
         pygame.draw.rect(screen, (255, 0, 0), player['hitbox'], 2)  # Red rectangle
 
 def move_player(player, delta):
     moved = False
     vel = int(PLAYER_VEL*delta)
     keys = pygame.key.get_pressed()
-    inputs = input_manager
-    if inputs.left_input(keys) and player['x']>0:
+    if left_input(keys) and player['x']>0:
         player['x'] = max(player['x'] - vel, 0)
         player['sprites'] = player['left']
         moved = True
-    if inputs.right_input(keys) and player['x']< WINDOW_SIZE_X -100:
+    if right_input(keys) and player['x']< WINDOW_SIZE_X -100:
         player['x']=min(player['x']+vel, WINDOW_SIZE_X-50)
         player['sprites']=player['right']
         moved=True
-    if inputs.shoot_input(keys):
+    if shoot_input(keys):
         now = pygame.time.get_ticks()
         if now - player['bullet_cooldown'] >= BULLET_COOLDOWN:
             player['bullet_cooldown'] = pygame.time.get_ticks()
             player_bullet = bullet.create_bullet(player['x'], player['y'])
             player['bullets'].append(player_bullet)
-    if inputs.debug_input(keys):
+    if debug_input(keys):
         global debug
         debug.debug_toggle = not debug.debug_toggle
     if not moved:
