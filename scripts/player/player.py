@@ -1,7 +1,7 @@
 from ..game_config.cons import *
 from . import bullet
 from ..game_config.debug import debug_toggle
-from ..game_config.input_manager import *
+from ..game_systems.input_manager import *
 
 
 
@@ -46,7 +46,7 @@ def move_player(player, delta):
         now = pygame.time.get_ticks()
         if now - player['bullet_cooldown'] >= BULLET_COOLDOWN:
             player['bullet_cooldown'] = pygame.time.get_ticks()
-            player_bullet = bullet.create_bullet(player['x'], player['y'])
+            player_bullet = bullet.create_bullet(player['x'], player['y'], 0)
             player['bullets'].append(player_bullet)
     if debug_input(keys):
         global debug
@@ -60,7 +60,18 @@ def move_player(player, delta):
 def player_update(player, delta, screen, enemies):
     move_player(player, delta)
     draw_player(screen, player)
+    check_colliosins(player, enemies)
+    # Update bullet position and check collisions
+    player['bullets'] = [bullet_object for bullet_object in player['bullets'] if bullet_object['y'] > -30]
+    for bullet_object in player['bullets']:
+        check_coll = bullet.update_bullets(bullet_object, delta, screen, enemies, False)
+        if check_coll:
+            player['score'] += 100
+            player['bullets'].remove(bullet_object)
 
+    return True # Player is still alive
+
+def check_colliosins(player, enemies):
     # Check player collisions with enemies
     player_rect = player['hitbox']  # PlayerHitBox 29 x 95
     for enemy in enemies:
@@ -70,13 +81,3 @@ def player_update(player, delta, screen, enemies):
             enemies.remove(enemy)
             if player['lives'] == 0:
                 break  # Player has no lives left
-
-    # Update bullet position and check collisions
-    player['bullets'] = [bullet_object for bullet_object in player['bullets'] if bullet_object['y'] > -30]
-    for bullet_object in player['bullets']:
-        check_coll = bullet.update_bullets(bullet_object, delta, screen, enemies)
-        if check_coll:
-            player['score'] += 100
-            player['bullets'].remove(bullet_object)
-
-    return True # Player is still alive

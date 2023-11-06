@@ -33,7 +33,10 @@ Bullet Constants
 BULLET_VEL = 0.6
 
 # Bullet sprite
-BULLET_SPRITE = pygame.image.load('assets/bullets/playerBullet.png')
+BULLET_SPRITE = {
+    0: pygame.image.load('assets/bullets/playerBullet.png'),
+    1: pygame.image.load('assets/bullets/enemyBullet.png')
+}
 
 '''
 Enemy Constants

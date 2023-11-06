@@ -1,5 +1,6 @@
 from ..game_config.cons import *
 from ..game_config.debug import debug_toggle
+from ..player.bullet import *
 import math
 
 def create_enemy(enemy_type, x, y):
@@ -12,7 +13,9 @@ def create_enemy(enemy_type, x, y):
         'x': x - 40,
         'y': y - 350,
         'angle': 1.5,
-        'last_rotation_time': time.time()
+        'last_rotation_time': time.time(),
+        'bullets':[],
+        'bullet_cooldown': 1
     }
     # Set hitbox size based on sprite size
     enemy['hitbox'] = sprite.get_rect(topleft=(enemy['x'], enemy['y']))
@@ -64,9 +67,25 @@ def move_enemy(enemy, delta, player):
             enemy['y'] += math.sin(enemy['angle']) * vel * 2
     enemy['hitbox'].topleft = (enemy['x'], enemy['y'])
 
+def create_enemy_bullet(enemy):
+    enemy_bullet = create_bullet(enemy['x'], enemy['y'], 1)
+    enemy['bullets'].append(enemy_bullet)
+
 def enemy_update(enemy, delta, screen, player):
     move_enemy(enemy, delta, player)
     draw_enemy(screen, enemy)
+
+    # Make the enemy shoot bullets
+    if time.time() - enemy['bullet_cooldown'] >= 1:
+        create_enemy_bullet(enemy)
+        enemy['bullet_cooldown'] = time.time()
+
+    # Update bullet position and check collisions
+    enemy['bullets'] = [bullet_object for bullet_object in enemy['bullets'] if bullet_object['y'] < WINDOW_SIZE_Y]
+    for bullet_object in enemy['bullets']:
+        move_bullet(bullet_object, delta, True)
+        draw_bullet(screen, bullet_object)
+
 
 def spawn_enemies(enemies, wave_enemies):
     if len(enemies) == 0 and len(wave_enemies) > 0:
