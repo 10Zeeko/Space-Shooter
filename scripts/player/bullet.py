@@ -1,5 +1,5 @@
 from ..game_config.cons import *
-from ..game_config.debug import debug_toggle
+from ..game_config.debug import *
 
 def create_bullet(x, y, bullet_type):
     bullet = {
@@ -23,7 +23,7 @@ def draw_bullet(screen, bullet):
     screen.blit(sprite, square)
 
     # Draw bullet hitbox for debugging
-    if debug_toggle:
+    if get_debug_toggle():
         pygame.draw.rect(screen, (255, 255, 0), bullet['hitbox'], 2)  # Yellow rectangle
 
 def move_bullet(bullet, delta, shooting_enemy):

@@ -1,6 +1,6 @@
 from ..game_config.cons import *
 from . import bullet
-from ..game_config.debug import debug_toggle
+from ..game_config.debug import *
 from ..game_systems.input_manager import *
 
 
@@ -27,10 +27,11 @@ def draw_player(screen, player):
     screen.blit(sprite, square)
 
     # Draw player hitbox for debugging
-    if debug_toggle:
+    if get_debug_toggle():
         pygame.draw.rect(screen, (255, 0, 0), player['hitbox'], 2)  # Red rectangle
 
 def move_player(player, delta):
+    global debug_toggle
     moved = False
     vel = int(PLAYER_VEL*delta)
     keys = pygame.key.get_pressed()
@@ -49,8 +50,8 @@ def move_player(player, delta):
             player_bullet = bullet.create_bullet(player['x'], player['y'], 0)
             player['bullets'].append(player_bullet)
     if debug_input(keys):
-        global debug
-        debug.debug_toggle = not debug.debug_toggle
+        debug_value = not get_debug_toggle()
+        set_debug_toggle(debug_value)
     if not moved:
         player['sprites'] = player['idle']
 
@@ -81,3 +82,8 @@ def check_colliosins(player, enemies):
             enemies.remove(enemy)
             if player['lives'] == 0:
                 break  # Player has no lives left
+
+def player_hit(player):
+    player['lives'] -= 1
+    if player['lives'] == 0:
+        print("Game Over")  # Player has no lives left

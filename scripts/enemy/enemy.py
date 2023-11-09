@@ -1,5 +1,5 @@
 from ..game_config.cons import *
-from ..game_config.debug import debug_toggle
+from ..game_config.debug import *
 from ..player.bullet import *
 import math
 
@@ -13,6 +13,7 @@ def create_enemy(enemy_type, x, y):
         'x': x - 40,
         'y': y - 350,
         'angle': 1.5,
+        'hp': 2,
         'last_rotation_time': time.time(),
         'bullets':[],
         'bullet_cooldown': 1
@@ -22,12 +23,13 @@ def create_enemy(enemy_type, x, y):
     return enemy
 
 def draw_enemy(screen, enemy):
+    global debug_toggle
     sprite = enemy['sprite']
     square = sprite.get_rect().move(enemy['x'], enemy['y'])
     screen.blit(sprite, square)
 
     # Draw enemy hitbox for debugging
-    if debug_toggle:
+    if get_debug_toggle():
         pygame.draw.rect(screen, (0, 0, 255), enemy['hitbox'], 2)  # Blue rectangle
 
 def move_enemy(enemy, delta, player):
@@ -107,3 +109,9 @@ def update_enemies(enemies, delta, screen, _player):
             enemies.remove(enemy_object)
         else:
             enemy_update(enemy_object, delta, screen, _player)
+
+def enemy_hit(enemy, enemies, player_bullets, bullet):
+    enemy['hp'] -= 1
+    if enemy['hp'] == 0:
+        enemies.remove(enemy)
+    player_bullets.remove(bullet)

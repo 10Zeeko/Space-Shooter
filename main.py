@@ -1,5 +1,6 @@
 # Game essential 
 from scripts.game_config.cons import *
+from scripts.game_systems.collisions_manager import *
 from scripts.enemy.enemy_waves import *
 
 # Game Objects
@@ -41,6 +42,7 @@ def main():
             if wave_round < 4:  # Check if there are more waves
                 wave_enemies = return_enemy_wave(wave_round)
         enemy.update_enemies(enemies, delta, screen, player1)
+        check_all_collisions(player1, enemies)
         hud.draw_hud(screen, player1)
         pygame.display.flip()
     pygame.quit()
