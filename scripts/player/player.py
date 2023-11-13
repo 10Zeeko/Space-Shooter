@@ -88,3 +88,6 @@ def player_hit(player):
     player['lives'] -= 1
     if player['lives'] == 0:
         print("Game Over")  # Player has no lives left
+
+def add_points_to_score(player, points):
+    player['score'] += points

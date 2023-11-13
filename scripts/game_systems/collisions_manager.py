@@ -19,7 +19,8 @@ def check_all_collisions(player, enemies):
         for enemy in enemies:
             if check_collision(enemy, bullet):
                 # Handle enemy-bullet collision
-                enemy_hit(enemy, enemies, player['bullets'], bullet)
+                value = enemy_hit(enemy, enemies, player['bullets'], bullet)
+                add_points_to_score(player, value)
 
     # Check for collisions between enemy's bullets and player
     for enemy in enemies:
