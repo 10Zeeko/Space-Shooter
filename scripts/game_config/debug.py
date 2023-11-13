@@ -1,4 +1,4 @@
-debug_toggle = True
+debug_toggle = False
 
 def set_debug_toggle(value):
     global debug_toggle

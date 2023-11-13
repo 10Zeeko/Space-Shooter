@@ -69,8 +69,12 @@ def move_enemy(enemy, delta, player):
             enemy['y'] += math.sin(enemy['angle']) * vel * 2
     enemy['hitbox'].topleft = (enemy['x'], enemy['y'])
 
-def create_enemy_bullet(enemy):
-    enemy_bullet = create_bullet(enemy['x'], enemy['y'], 1)
+def create_enemy_bullet(enemy, angle):
+    enemy_bullet_type = 1
+    if enemy['enemy_type'] == 2:
+        enemy_bullet_type = 2
+    enemy_bullet = create_bullet(enemy['x'] + 45.5, enemy['y'] + 70, enemy_bullet_type)
+    enemy_bullet['angle'] = angle
     enemy['bullets'].append(enemy_bullet)
 
 def enemy_update(enemy, delta, screen, player):
@@ -79,7 +83,14 @@ def enemy_update(enemy, delta, screen, player):
 
     # Make the enemy shoot bullets
     if time.time() - enemy['bullet_cooldown'] >= 1:
-        create_enemy_bullet(enemy)
+        match enemy['enemy_type']:
+            case 2:
+                create_enemy_bullet(enemy, 45)
+                create_enemy_bullet(enemy, 90)
+            case 3:
+                print("NO")
+            case other:
+                create_enemy_bullet(enemy, math.pi / 2)
         enemy['bullet_cooldown'] = time.time()
 
     # Update bullet position and check collisions

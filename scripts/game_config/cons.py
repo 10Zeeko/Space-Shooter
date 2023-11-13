@@ -35,7 +35,8 @@ BULLET_VEL = 0.6
 # Bullet sprite
 BULLET_SPRITE = {
     0: pygame.image.load('assets/bullets/playerBullet.png'),
-    1: pygame.image.load('assets/bullets/enemyBullet.png')
+    1: pygame.image.load('assets/bullets/enemyBullet.png'),
+    2: pygame.image.load('assets/bullets/laserRed.png')
 }
 
 '''

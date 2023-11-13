@@ -47,7 +47,8 @@ def move_player(player, delta):
         now = pygame.time.get_ticks()
         if now - player['bullet_cooldown'] >= BULLET_COOLDOWN:
             player['bullet_cooldown'] = pygame.time.get_ticks()
-            player_bullet = bullet.create_bullet(player['x'], player['y'], 0)
+            player_bullet = bullet.create_bullet(player['x'] + 45.5, player['y'] - 18.5, 0)
+            player_bullet['angle'] = 0
             player['bullets'].append(player_bullet)
     if debug_input(keys):
         debug_value = not get_debug_toggle()
