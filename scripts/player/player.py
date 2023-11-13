@@ -34,11 +34,11 @@ def draw_player(screen, player):
     if get_debug_toggle():
         pygame.draw.rect(screen, (255, 0, 0), player['hitbox'], 2)  # Red rectangle
 
-def move_player(player, delta):
+def move_player(player, delta, bullets):
     global debug_toggle
     moved = False
     # Increase the velocity if the speed boost power-up is active
-    vel = int(PLAYER_VEL * delta * (2.0 if player.get('speed_boost', False) else 1))
+    vel = int(PLAYER_VEL * delta * (1.5 if player.get('speed_boost', False) else 1))
     keys = pygame.key.get_pressed()
     if left_input(keys) and player['x']>0:
         player['x'] = max(player['x'] - vel, 0)
@@ -59,8 +59,8 @@ def move_player(player, delta):
                 player_bullet['x'] = player_bullet['x'] - 3.0
                 player_bullet2 = bullet.create_bullet(player['x'] + 48.5, player['y'] - 18.5, 0)
                 player_bullet2['angle'] = 0
-                player['bullets'].append(player_bullet2)
-            player['bullets'].append(player_bullet)
+                bullets.append(player_bullet2)
+            bullets.append(player_bullet)
             
     if debug_input(keys):
         debug_value = not get_debug_toggle()
@@ -71,14 +71,10 @@ def move_player(player, delta):
     # Update the hitbox position to move with the player
     player['hitbox'].topleft = (player['x'] + 35, player['y'] + 5)
 
-def player_update(player, delta, screen, enemies):
-    move_player(player, delta)
+def player_update(player, delta, screen, enemies, bullets):
+    move_player(player, delta, bullets)
     draw_player(screen, player)
     check_colliosins(player, enemies)
-    # Update bullet position
-    player['bullets'] = [bullet_object for bullet_object in player['bullets'] if bullet_object['y'] > -30]
-    for bullet_object in player['bullets']:
-        bullet.update_bullets(bullet_object, delta, screen, enemies, False)
 
     return True # Player is still alive
 

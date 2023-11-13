@@ -25,18 +25,22 @@ def handle_events(player1):
         elif event.type == pygame.USEREVENT + 1:
             player1['invincible'] = False
             print ("No more invincibility")
+            pygame.time.set_timer(pygame.USEREVENT + 1, 0)  # Stop the timer
         elif event.type == pygame.USEREVENT + 2:
             player1['speed_boost'] = False
             print ("No more speed")
+            pygame.time.set_timer(pygame.USEREVENT + 2, 0)  # Stop the timer
         elif event.type == pygame.USEREVENT + 3:
             player1['double_laser'] = False
             print ("No more laser")
+            pygame.time.set_timer(pygame.USEREVENT + 3, 0)  # Stop the timer
     return True
 
 def main():
     screen, game_icon, background_image, background_size = init_game()
     player1 = player.create_player()
     power_ups = []
+    bullets = []
     wave_round = 0
     enemies, wave_enemies = create_wave(wave_round)
     clock = pygame.time.Clock()
@@ -45,17 +49,20 @@ def main():
         delta = clock.tick(FPS)
         going = handle_events(player1)
         screen.blit(background_image,background_size)
-        player.player_update(player1, delta, screen, enemies)
+        player.player_update(player1, delta, screen, enemies, bullets)
         enemies, wave_enemies = enemy.spawn_enemies(enemies, wave_enemies)
         if len(enemies) == 0 and len(wave_enemies) == 0:
             wave_round += 1
             if wave_round < 4:  # Check if there are more waves
                 wave_enemies = return_enemy_wave(wave_round)
-        enemy.update_enemies(enemies, delta, screen, player1)
+        enemy.update_enemies(enemies, delta, screen, player1, bullets)
         # Update power-ups
         for power_up in power_ups:
             update_power_up(power_up, delta, screen)
-        check_all_collisions(player1, enemies, power_ups)
+        # Update bullets
+        for bullet_object in bullets:
+            update_bullets(bullet_object, delta, screen)
+        check_all_collisions(player1, enemies, power_ups, bullets)
         hud.draw_hud(screen, player1)
         pygame.display.flip()
     pygame.quit()

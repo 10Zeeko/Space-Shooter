@@ -6,7 +6,7 @@ def check_collision(object1, object2):
     # Check if the hitboxes of the two objects are colliding
     return object1['hitbox'].colliderect(object2['hitbox'])
 
-def check_all_collisions(player, enemies, power_ups):
+def check_all_collisions(player, enemies, power_ups, bullets):
     # Check for collisions between player and enemies
     for enemy in enemies:
         if check_collision(player, enemy):
@@ -15,20 +15,19 @@ def check_all_collisions(player, enemies, power_ups):
             enemies.remove(enemy)
 
     # Check for collisions between player's bullets and enemies
-    for bullet in player['bullets']:
+    for bullet in bullets:
         for enemy in enemies:
-            if check_collision(enemy, bullet):
+            if check_collision(enemy, bullet) and not bullet['shooting_enemy']:
                 # Handle enemy-bullet collision
-                value = enemy_hit(enemy, enemies, player['bullets'], bullet, power_ups)
+                value = enemy_hit(enemy, enemies, power_ups)
                 add_points_to_score(player, value)
-
-    # Check for collisions between enemy's bullets and player
-    for enemy in enemies:
-        for bullet in enemy['bullets']:
-            if check_collision(player, bullet):
-                # Handle player-bullet collision
-                handle_damage_player(player)
-                enemy['bullets'].remove(bullet)
+                remove_bullet(bullets, bullet)
+        if check_collision(player, bullet) and bullet['shooting_enemy']:
+            # Handle player-bullet collision
+            handle_damage_player(player)
+            remove_bullet(bullets, bullet)
+        elif bullet['y'] <= -100 or bullet['y'] >= 900:
+            remove_bullet(bullets, bullet)
     
      # Check for collisions between player and power-ups
     for power_up in power_ups:
@@ -36,6 +35,12 @@ def check_all_collisions(player, enemies, power_ups):
             # Handle player-power-up collision
             activate_power_up(player, power_up)
             power_ups.remove(power_up)
+
+def remove_bullet(bullets, bullet):
+    try:
+        bullets.remove(bullet)
+    except ValueError:
+        pass  # Do nothing if bullet is not in the list
 
 def handle_damage_player(player):
     if player['shield']:

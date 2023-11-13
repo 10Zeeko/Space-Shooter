@@ -42,15 +42,15 @@ def draw_enemy(screen, enemy):
     if get_debug_toggle():
         pygame.draw.rect(screen, (0, 0, 255), enemy['hitbox'], 2)  # Blue rectangle
 
-def create_enemy_bullet(enemy, angle):
+def create_enemy_bullet(enemy, angle, bullets):
     enemy_bullet_type = 1
     if enemy['enemy_type'] == 2:
         enemy_bullet_type = 2
     enemy_bullet = create_bullet(enemy['x'] + 45.5, enemy['y'] + 70, enemy_bullet_type)
     enemy_bullet['angle'] = angle
-    enemy['bullets'].append(enemy_bullet)
+    bullets.append(enemy_bullet)
 
-def enemy_update(enemy, delta, screen, player):
+def enemy_update(enemy, delta, screen, player, bullets):
     move_enemy(enemy, delta, player)
     draw_enemy(screen, enemy)
 
@@ -58,19 +58,13 @@ def enemy_update(enemy, delta, screen, player):
     if time.time() - enemy['bullet_cooldown'] >= 1 and enemy['y'] > 30:
         match enemy['enemy_type']:
             case 2:
-                create_enemy_bullet(enemy, 45)
-                create_enemy_bullet(enemy, 90)
+                create_enemy_bullet(enemy, 45, bullets)
+                create_enemy_bullet(enemy, 90, bullets)
             case 3:
                 pass
             case other:
-                create_enemy_bullet(enemy, math.pi / 2)
+                create_enemy_bullet(enemy, math.pi / 2, bullets)
         enemy['bullet_cooldown'] = time.time()
-
-    # Update bullet position and check collisions
-    enemy['bullets'] = [bullet_object for bullet_object in enemy['bullets'] if bullet_object['y'] < WINDOW_SIZE_Y]
-    for bullet_object in enemy['bullets']:
-        move_bullet(bullet_object, delta, True)
-        draw_bullet(screen, bullet_object)
 
 
 def spawn_enemies(enemies, wave_enemies):
@@ -87,22 +81,18 @@ def spawn_enemies(enemies, wave_enemies):
         wave_enemies.clear()
     return enemies, wave_enemies
 
-def update_enemies(enemies, delta, screen, _player):
+def update_enemies(enemies, delta, screen, _player, bullets):
     for enemy_object in enemies:
         if enemy_object['y'] > 900:
             enemies.remove(enemy_object)
         else:
-            enemy_update(enemy_object, delta, screen, _player)
+            enemy_update(enemy_object, delta, screen, _player, bullets)
 
-def enemy_hit(enemy, enemies, player_bullets, bullet, power_ups):
+def enemy_hit(enemy, enemies, power_ups):
     enemy['hp'] -= 1
-    try:
-        player_bullets.remove(bullet)
-    except ValueError:
-        pass  # Do nothing if bullet is not in the list
     if enemy['hp'] == 0:
         # 10% chance to drop a power-up
-        if random.random() < 1:
+        if random.random() < 0.3:
             # Choose a random power-up type
             power_up_type = random.choice([0, 1, 2, 3])
             print (power_up_type)

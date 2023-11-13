@@ -7,18 +7,20 @@ def create_bullet(x, y, bullet_type):
         'sprite': BULLET_SPRITE[bullet_type],
         'x': x,
         'y': y,
-        'bullet_type': bullet_type
+        'bullet_type': bullet_type,
+        'shooting_enemy': True
     }
-
-    # If it's an enemy bullet, flip the sprite vertically
-    if bullet_type:
-        bullet['sprite'] = pygame.transform.flip(bullet['sprite'], False, True)
     width, height = bullet['sprite'].get_size()
-    if bullet_type == 2:
+    # If it's an enemy bullet, flip the sprite vertically
+    if bullet_type == 1:
+        bullet['sprite'] = pygame.transform.flip(bullet['sprite'], False, True)
+    elif bullet_type == 2:
         smaller_sprite = pygame.transform.scale(bullet['sprite'], (width // 2, height // 2))
         bullet['sprite'] = smaller_sprite
         width = width / 2
         height = height / 2
+    else:
+        bullet['shooting_enemy'] = False
     bullet['hitbox'] = pygame.Rect(bullet['x'], bullet['y'], width, height)
 
     return bullet
@@ -33,16 +35,16 @@ def draw_bullet(screen, bullet):
     if get_debug_toggle():
         pygame.draw.rect(screen, (255, 255, 0), bullet['hitbox'], 2)  # Yellow rectangle
 
-def move_bullet(bullet, delta, shooting_enemy):
+def move_bullet(bullet, delta):
     vel = int(BULLET_VEL*delta)
-    if shooting_enemy:
+    if bullet['shooting_enemy']:
         # Use the angle to calculate the new x and y positions
         bullet['x'] += math.cos(bullet['angle']) * vel
         bullet['y'] += math.sin(bullet['angle']) * vel
     else:
-        bullet['y'] = max(bullet['y'] - vel, -30)
+        bullet['y'] = max(bullet['y'] - vel, -100)
     bullet['hitbox'].topleft = (bullet['x'], bullet['y'])
 
-def update_bullets(bullet, delta, screen, enemies, shooting_enemy):
-    move_bullet(bullet, delta, shooting_enemy)
+def update_bullets(bullet, delta, screen):
+    move_bullet(bullet, delta)
     draw_bullet(screen, bullet)
