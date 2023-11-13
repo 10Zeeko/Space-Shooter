@@ -1,6 +1,7 @@
 from ..enemy.enemy_behavior import *
 from ..game_config.debug import *
 from ..player.bullet import *
+from ..player.power_ups import *
 
 def create_enemy(enemy_type, x, y):
     if enemy_type not in ENEMY_SPRITES:
@@ -22,13 +23,13 @@ def create_enemy(enemy_type, x, y):
     enemy['hitbox'] = sprite.get_rect(topleft=(enemy['x'], enemy['y']))
     match enemy_type:
         case 0:
-            enemy['value'] = 50
+            enemy['value'] = 100
         case 1:
-            enemy['value'] = 100
+            enemy['value'] = 50
         case 2:
-            enemy['value'] = 100
-        case 3:
             enemy['value'] = 150
+        case 3:
+            enemy['value'] = 100
     return enemy
 
 def draw_enemy(screen, enemy):
@@ -54,7 +55,7 @@ def enemy_update(enemy, delta, screen, player):
     draw_enemy(screen, enemy)
 
     # Make the enemy shoot bullets
-    if time.time() - enemy['bullet_cooldown'] >= 1:
+    if time.time() - enemy['bullet_cooldown'] >= 1 and enemy['y'] > 30:
         match enemy['enemy_type']:
             case 2:
                 create_enemy_bullet(enemy, 45)
@@ -93,13 +94,21 @@ def update_enemies(enemies, delta, screen, _player):
         else:
             enemy_update(enemy_object, delta, screen, _player)
 
-def enemy_hit(enemy, enemies, player_bullets, bullet):
+def enemy_hit(enemy, enemies, player_bullets, bullet, power_ups):
     enemy['hp'] -= 1
     try:
         player_bullets.remove(bullet)
     except ValueError:
         pass  # Do nothing if bullet is not in the list
     if enemy['hp'] == 0:
+        # 10% chance to drop a power-up
+        if random.random() < 1:
+            # Choose a random power-up type
+            power_up_type = random.choice([0, 1, 2, 3])
+            print (power_up_type)
+            # Create the power-up at the enemy's position
+            new_power_up = create_power_up(power_up_type, enemy['x'], enemy['y'])
+            power_ups.append(new_power_up)
         enemies.remove(enemy)
         return enemy['value']
     return 0

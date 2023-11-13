@@ -18,22 +18,32 @@ def init_game():
     pygame.display.set_icon(game_icon)
     return screen, game_icon, background_image, background_size
 
-def handle_events():
+def handle_events(player1):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             return False
+        elif event.type == pygame.USEREVENT + 1:
+            player1['invincible'] = False
+            print ("No more invincibility")
+        elif event.type == pygame.USEREVENT + 2:
+            player1['speed_boost'] = False
+            print ("No more speed")
+        elif event.type == pygame.USEREVENT + 3:
+            player1['double_laser'] = False
+            print ("No more laser")
     return True
 
 def main():
     screen, game_icon, background_image, background_size = init_game()
     player1 = player.create_player()
+    power_ups = []
     wave_round = 0
     enemies, wave_enemies = create_wave(wave_round)
     clock = pygame.time.Clock()
     going = True
     while (going):
         delta = clock.tick(FPS)
-        going = handle_events()
+        going = handle_events(player1)
         screen.blit(background_image,background_size)
         player.player_update(player1, delta, screen, enemies)
         enemies, wave_enemies = enemy.spawn_enemies(enemies, wave_enemies)
@@ -42,7 +52,10 @@ def main():
             if wave_round < 4:  # Check if there are more waves
                 wave_enemies = return_enemy_wave(wave_round)
         enemy.update_enemies(enemies, delta, screen, player1)
-        check_all_collisions(player1, enemies)
+        # Update power-ups
+        for power_up in power_ups:
+            update_power_up(power_up, delta, screen)
+        check_all_collisions(player1, enemies, power_ups)
         hud.draw_hud(screen, player1)
         pygame.display.flip()
     pygame.quit()

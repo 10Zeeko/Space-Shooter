@@ -1,5 +1,6 @@
 import pygame
 import time
+import random
 
 '''
 Game Window Constants
@@ -37,6 +38,18 @@ BULLET_SPRITE = {
     0: pygame.image.load('assets/bullets/playerBullet.png'),
     1: pygame.image.load('assets/bullets/enemyBullet.png'),
     2: pygame.image.load('assets/bullets/laserRed.png')
+}
+
+'''
+Power Ups Constants
+'''
+POWER_UP_SPEED = 0.4
+
+POWER_UP_SPRITES = {
+    0: pygame.image.load('assets/power_ups/invencivility.png'),
+    1: pygame.image.load('assets/power_ups/speed.png'),
+    2: pygame.image.load('assets/power_ups/shield.png'),
+    3: pygame.image.load('assets/power_ups/double.png')
 }
 
 '''

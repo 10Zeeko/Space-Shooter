@@ -15,7 +15,11 @@ def create_player():
         'bullets':[],
         'bullet_cooldown': 0,
         'x':400-50,
-        'y':800-76
+        'y':800-76,
+        'invincible': False,
+        'speed_boost': False,
+        'shield': False,
+        'double_laser': False
     }
     player['sprites'] = player['idle']
     player['hitbox'] = pygame.Rect(player['x'] + 35, player['y'] + 5, 29, 95)
@@ -33,7 +37,8 @@ def draw_player(screen, player):
 def move_player(player, delta):
     global debug_toggle
     moved = False
-    vel = int(PLAYER_VEL*delta)
+    # Increase the velocity if the speed boost power-up is active
+    vel = int(PLAYER_VEL * delta * (2.0 if player.get('speed_boost', False) else 1))
     keys = pygame.key.get_pressed()
     if left_input(keys) and player['x']>0:
         player['x'] = max(player['x'] - vel, 0)
@@ -49,7 +54,14 @@ def move_player(player, delta):
             player['bullet_cooldown'] = pygame.time.get_ticks()
             player_bullet = bullet.create_bullet(player['x'] + 45.5, player['y'] - 18.5, 0)
             player_bullet['angle'] = 0
+            # If the double laser power-up is active, create an additional bullet
+            if player.get('double_laser', False):
+                player_bullet['x'] = player_bullet['x'] - 3.0
+                player_bullet2 = bullet.create_bullet(player['x'] + 48.5, player['y'] - 18.5, 0)
+                player_bullet2['angle'] = 0
+                player['bullets'].append(player_bullet2)
             player['bullets'].append(player_bullet)
+            
     if debug_input(keys):
         debug_value = not get_debug_toggle()
         set_debug_toggle(debug_value)
@@ -63,21 +75,18 @@ def player_update(player, delta, screen, enemies):
     move_player(player, delta)
     draw_player(screen, player)
     check_colliosins(player, enemies)
-    # Update bullet position and check collisions
+    # Update bullet position
     player['bullets'] = [bullet_object for bullet_object in player['bullets'] if bullet_object['y'] > -30]
     for bullet_object in player['bullets']:
-        check_coll = bullet.update_bullets(bullet_object, delta, screen, enemies, False)
-        if check_coll:
-            player['score'] += 100
-            player['bullets'].remove(bullet_object)
+        bullet.update_bullets(bullet_object, delta, screen, enemies, False)
 
     return True # Player is still alive
 
 def check_colliosins(player, enemies):
     # Check player collisions with enemies
-    player_rect = player['hitbox']  # PlayerHitBox 29 x 95
+    player_rect = player['hitbox']
     for enemy in enemies:
-        enemy_rect = pygame.Rect(enemy['x'], enemy['y'], 93, 84)  # assuming the enemy's size is 100x100
+        enemy_rect = pygame.Rect(enemy['x'], enemy['y'], 93, 84)
         if player_rect.colliderect(enemy_rect):
             player['lives'] -= 1
             enemies.remove(enemy)
@@ -91,3 +100,17 @@ def player_hit(player):
 
 def add_points_to_score(player, points):
     player['score'] += points
+
+def activate_power_up(player, power_up):
+    power_up_type = power_up['power_up_type']
+    if power_up_type == 0:  # Invincibility
+        player['invincible'] = True
+        pygame.time.set_timer(pygame.USEREVENT + 1, 3000)
+    elif power_up_type == 1:  # Speed boost
+        player['speed_boost'] = True
+        pygame.time.set_timer(pygame.USEREVENT + 2, 6000)
+    elif power_up_type == 2:  # Shield
+        player['shield'] = True
+    elif power_up_type == 3:  # Double laser
+        player['double_laser'] = True
+        pygame.time.set_timer(pygame.USEREVENT + 3, 4000)
