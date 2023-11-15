@@ -21,7 +21,8 @@ def draw_power_up(screen, power_up):
         pygame.draw.rect(screen, (0, 255, 0), power_up['hitbox'], 2)
 
 def move_power_up(power_up, delta):
-    power_up['y'] += POWER_UP_SPEED * delta
+    vel = int(POWER_UP_SPEED*delta)
+    power_up['y'] += vel
     power_up['hitbox'].topleft = (power_up['x'], power_up['y'])
 
 def update_power_up(power_up, delta, screen):

@@ -23,6 +23,7 @@ def create_player():
     }
     player['sprites'] = player['idle']
     player['hitbox'] = pygame.Rect(player['x'] + 35, player['y'] + 5, 29, 95)
+    player['pick_hitbox'] = PLAYER_IDLE.get_rect(topleft=(player['x'], player['y']))
     return player
 
 def draw_player(screen, player):
@@ -33,6 +34,7 @@ def draw_player(screen, player):
     # Draw player hitbox for debugging
     if get_debug_toggle():
         pygame.draw.rect(screen, (255, 0, 0), player['hitbox'], 2)  # Red rectangle
+        pygame.draw.rect(screen, (0, 255, 100), player['pick_hitbox'], 2)  # Green rectangle
 
 def move_player(player, delta, bullets):
     global debug_toggle
@@ -70,6 +72,7 @@ def move_player(player, delta, bullets):
 
     # Update the hitbox position to move with the player
     player['hitbox'].topleft = (player['x'] + 35, player['y'] + 5)
+    player['pick_hitbox'].topleft = (player['x'], player['y'])
 
 def player_update(player, delta, screen, enemies, bullets):
     move_player(player, delta, bullets)

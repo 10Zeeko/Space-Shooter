@@ -43,7 +43,7 @@ BULLET_SPRITE = {
 '''
 Power Ups Constants
 '''
-POWER_UP_SPEED = 0.4
+POWER_UP_SPEED = 0.2
 
 POWER_UP_SPRITES = {
     0: pygame.image.load('assets/power_ups/invencivility.png'),

@@ -5,6 +5,9 @@ from ..enemy.enemy import *
 def check_collision(object1, object2):
     # Check if the hitboxes of the two objects are colliding
     return object1['hitbox'].colliderect(object2['hitbox'])
+def check_pick_collision(object1, object2):
+    # Check if the hitboxes of the two objects are colliding
+    return object1['pick_hitbox'].colliderect(object2['hitbox'])
 
 def check_all_collisions(player, enemies, power_ups, bullets):
     # Check for collisions between player and enemies
@@ -31,7 +34,7 @@ def check_all_collisions(player, enemies, power_ups, bullets):
     
      # Check for collisions between player and power-ups
     for power_up in power_ups:
-        if check_collision(player, power_up):
+        if check_pick_collision(player, power_up):
             # Handle player-power-up collision
             activate_power_up(player, power_up)
             power_ups.remove(power_up)
