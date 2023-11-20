@@ -2,8 +2,7 @@ from ..game_config.cons import *
 from . import bullet
 from ..game_config.debug import *
 from ..game_systems.input_manager import *
-
-
+from ..game_systems.effects_manager import *
 
 def create_player():
     player = {
@@ -76,6 +75,7 @@ def move_player(player, delta, bullets):
 
 def player_update(player, delta, screen, enemies, bullets):
     move_player(player, delta, bullets)
+    update_game_object(player)
     draw_player(screen, player)
     check_colliosins(player, enemies)
 
@@ -94,6 +94,7 @@ def check_colliosins(player, enemies):
 
 def player_hit(player):
     player['lives'] -= 1
+    blink(player, (90, 30, 30), 2, 150)
     if player['lives'] == 0:
         print("Game Over")  # Player has no lives left
 

@@ -1,6 +1,7 @@
 from ..player.player import *
 from ..player.bullet import *
 from ..enemy.enemy import *
+from ..game_systems.effects_manager import *
 
 def check_collision(object1, object2):
     # Check if the hitboxes of the two objects are colliding

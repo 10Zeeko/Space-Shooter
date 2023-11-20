@@ -2,13 +2,14 @@ from ..enemy.enemy_behavior import *
 from ..game_config.debug import *
 from ..player.bullet import *
 from ..player.power_ups import *
+from ..game_systems.effects_manager import *
 
 def create_enemy(enemy_type, x, y):
     if enemy_type not in ENEMY_SPRITES:
         return None
     sprite = ENEMY_SPRITES[enemy_type]
     enemy = {
-        'sprite': sprite,
+        'sprites': sprite,
         'enemy_type': enemy_type,
         'x': x - 40,
         'y': y - 350,
@@ -34,7 +35,7 @@ def create_enemy(enemy_type, x, y):
 
 def draw_enemy(screen, enemy):
     global debug_toggle
-    sprite = enemy['sprite']
+    sprite = enemy['sprites']
     square = sprite.get_rect().move(enemy['x'], enemy['y'])
     screen.blit(sprite, square)
 
@@ -53,6 +54,7 @@ def create_enemy_bullet(enemy, angle, bullets):
 def enemy_update(enemy, delta, screen, player, bullets):
     move_enemy(enemy, delta, player)
     draw_enemy(screen, enemy)
+    update_game_object(enemy)
 
     # Make the enemy shoot bullets
     if time.time() - enemy['bullet_cooldown'] >= 1 and enemy['y'] > 30:
@@ -90,6 +92,7 @@ def update_enemies(enemies, delta, screen, _player, bullets):
 
 def enemy_hit(enemy, enemies, power_ups):
     enemy['hp'] -= 1
+    blink(enemy, (255, 0, 0), 1, 150)
     if enemy['hp'] == 0:
         # 10% chance to drop a power-up
         if random.random() < 0.3:
