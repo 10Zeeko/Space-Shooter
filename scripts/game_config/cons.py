@@ -52,6 +52,12 @@ POWER_UP_SPRITES = {
     3: pygame.image.load('assets/power_ups/double.png')
 }
 
+SHIELD_SPRITE = {
+    0: pygame.image.load('assets/power_ups/shield1.png'),
+    1: pygame.image.load('assets/power_ups/shield2.png'),
+    2: pygame.image.load('assets/power_ups/shield3.png')
+}
+
 '''
 Enemy Constants
 '''

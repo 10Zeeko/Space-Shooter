@@ -1,4 +1,5 @@
 import pygame
+from ..game_config.cons import *
 
 def blink(game_object, blink_color, blink_times, blink_duration):
     # Save the original image
@@ -32,7 +33,7 @@ def blink(game_object, blink_color, blink_times, blink_duration):
     game_object['blink_duration'] = blink_duration
     game_object['blink_phase'] = 0
 
-def update_game_object(game_object):
+def update_effects_game_object(game_object):
     # Update the blinking effect
     if 'blink_start_time' in game_object:
         elapsed_time = pygame.time.get_ticks() - game_object['blink_start_time']
@@ -43,13 +44,10 @@ def update_game_object(game_object):
             game_object['blink_phase'] = int(elapsed_time / blink_phase_duration) % 2
 
             if game_object['blink_phase'] == 0:
-                print ("Blink")
                 game_object['sprites'] = game_object['blink_image']
             else:
-                print ("Original")
                 game_object['sprites'] = game_object['original_image']
         else:
             # End the blinking effect
-            print ("Finish")
             game_object['sprites'] = game_object['original_image']
             del game_object['blink_start_time']

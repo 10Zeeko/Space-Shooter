@@ -53,8 +53,8 @@ def create_enemy_bullet(enemy, angle, bullets):
 
 def enemy_update(enemy, delta, screen, player, bullets):
     move_enemy(enemy, delta, player)
+    update_effects_game_object(enemy)
     draw_enemy(screen, enemy)
-    update_game_object(enemy)
 
     # Make the enemy shoot bullets
     if time.time() - enemy['bullet_cooldown'] >= 1 and enemy['y'] > 30:

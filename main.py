@@ -49,7 +49,7 @@ def main():
         delta = clock.tick(FPS)
         going = handle_events(player1)
         screen.blit(background_image,background_size)
-        player.player_update(player1, delta, screen, enemies, bullets)
+        player.player_update(player1, delta, screen, bullets)
         enemies, wave_enemies = enemy.spawn_enemies(enemies, wave_enemies)
         if len(enemies) == 0 and len(wave_enemies) == 0:
             wave_round += 1

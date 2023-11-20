@@ -10,6 +10,7 @@ def create_player():
         'left': PLAYER_LEFT,
         'idle': PLAYER_IDLE,
         'lives': 3,
+        'alive': True,
         'score': 0,
         'bullets':[],
         'bullet_cooldown': 0,
@@ -73,24 +74,11 @@ def move_player(player, delta, bullets):
     player['hitbox'].topleft = (player['x'] + 35, player['y'] + 5)
     player['pick_hitbox'].topleft = (player['x'], player['y'])
 
-def player_update(player, delta, screen, enemies, bullets):
+def player_update(player, delta, screen, bullets):
     move_player(player, delta, bullets)
-    update_game_object(player)
+    update_effects_game_object(player)
     draw_player(screen, player)
-    check_colliosins(player, enemies)
-
-    return True # Player is still alive
-
-def check_colliosins(player, enemies):
-    # Check player collisions with enemies
-    player_rect = player['hitbox']
-    for enemy in enemies:
-        enemy_rect = pygame.Rect(enemy['x'], enemy['y'], 93, 84)
-        if player_rect.colliderect(enemy_rect):
-            player['lives'] -= 1
-            enemies.remove(enemy)
-            if player['lives'] == 0:
-                break  # Player has no lives left
+    return player['alive'] # Player is still alive
 
 def player_hit(player):
     player['lives'] -= 1
@@ -105,12 +93,14 @@ def activate_power_up(player, power_up):
     power_up_type = power_up['power_up_type']
     if power_up_type == 0:  # Invincibility
         player['invincible'] = True
+        blink(player, (20, 90, 90), 3, 1000)
         pygame.time.set_timer(pygame.USEREVENT + 1, 3000)
     elif power_up_type == 1:  # Speed boost
         player['speed_boost'] = True
         pygame.time.set_timer(pygame.USEREVENT + 2, 6000)
     elif power_up_type == 2:  # Shield
         player['shield'] = True
+        add_shield(player, 10)
     elif power_up_type == 3:  # Double laser
         player['double_laser'] = True
         pygame.time.set_timer(pygame.USEREVENT + 3, 4000)
