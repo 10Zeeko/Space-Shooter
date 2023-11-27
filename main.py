@@ -1,6 +1,7 @@
 # Game essential 
 from scripts.game_config.cons import *
 from scripts.game_systems.collisions_manager import *
+from scripts.game_systems.effects_manager import *
 from scripts.enemy.enemy_waves import *
 
 # Game Objects
@@ -41,6 +42,7 @@ def main():
     player1 = player.create_player()
     power_ups = []
     bullets = []
+    effects = []
     wave_round = 0
     enemies, wave_enemies = create_wave(wave_round)
     clock = pygame.time.Clock()
@@ -62,7 +64,9 @@ def main():
         # Update bullets
         for bullet_object in bullets:
             update_bullets(bullet_object, delta, screen)
-        check_all_collisions(player1, enemies, power_ups, bullets)
+        check_all_collisions(player1, enemies, power_ups, bullets, effects)
+        draw_effects(screen, effects)
+        explosion_update(effects)
         hud.draw_hud(screen, player1)
         pygame.display.flip()
     pygame.quit()

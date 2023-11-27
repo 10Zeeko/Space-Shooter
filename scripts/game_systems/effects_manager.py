@@ -1,5 +1,6 @@
 import pygame
 from ..game_config.cons import *
+from ..game_systems.explosion import *
 
 def blink(game_object, blink_color, blink_times, blink_duration):
     # Save the original image
@@ -51,3 +52,9 @@ def update_effects_game_object(game_object):
             # End the blinking effect
             game_object['sprites'] = game_object['original_image']
             del game_object['blink_start_time']
+
+def draw_effects(screen, effects):
+    for effect in effects:
+        sprite = effect['sprites'][effect['current_sprite_index']]
+        square = sprite.get_rect().move(effect['x'], effect['y'])
+        screen.blit(sprite, square)

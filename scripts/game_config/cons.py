@@ -71,3 +71,19 @@ ENEMY_SPRITES = {
     2: pygame.image.load('assets/enemy/enemyCrossedLaser.png'),
     3: pygame.image.load('assets/enemy/enemyFast.png')
 }
+
+'''
+Game Constants
+'''
+
+EXPLOSION_SPRITES = {
+    0: pygame.transform.scale(pygame.image.load('assets/explosions/regularExplosion00.png'), (64, 64)),
+    1: pygame.transform.scale(pygame.image.load('assets/explosions/regularExplosion01.png'), (64, 64)),
+    2: pygame.transform.scale(pygame.image.load('assets/explosions/regularExplosion02.png'), (64, 64)),
+    3: pygame.transform.scale(pygame.image.load('assets/explosions/regularExplosion03.png'), (64, 64)),
+    4: pygame.transform.scale(pygame.image.load('assets/explosions/regularExplosion04.png'), (64, 64)),
+    5: pygame.transform.scale(pygame.image.load('assets/explosions/regularExplosion05.png'), (64, 64)),
+    6: pygame.transform.scale(pygame.image.load('assets/explosions/regularExplosion06.png'), (64, 64)),
+    7: pygame.transform.scale(pygame.image.load('assets/explosions/regularExplosion07.png'), (64, 64)),
+    8: pygame.transform.scale(pygame.image.load('assets/explosions/regularExplosion08.png'), (64, 64)),
+}

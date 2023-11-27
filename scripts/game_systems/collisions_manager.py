@@ -10,7 +10,7 @@ def check_pick_collision(object1, object2):
     # Check if the hitboxes of the two objects are colliding
     return object1['pick_hitbox'].colliderect(object2['hitbox'])
 
-def check_all_collisions(player, enemies, power_ups, bullets):
+def check_all_collisions(player, enemies, power_ups, bullets, effects):
     # Check for collisions between player and enemies
     for enemy in enemies:
         if check_collision(player, enemy):
@@ -23,7 +23,7 @@ def check_all_collisions(player, enemies, power_ups, bullets):
         for enemy in enemies:
             if check_collision(enemy, bullet) and not bullet['shooting_enemy']:
                 # Handle enemy-bullet collision
-                value = enemy_hit(enemy, enemies, power_ups)
+                value = enemy_hit(enemy, enemies, power_ups, effects)
                 add_points_to_score(player, value)
                 remove_bullet(bullets, bullet)
         if check_collision(player, bullet) and bullet['shooting_enemy']:
@@ -49,7 +49,6 @@ def remove_bullet(bullets, bullet):
 def handle_damage_player(player):
     if player['shield']:
         player['shield'] = False
-        print ("No more shield")
     elif player['invincible']:
         pass
     else:

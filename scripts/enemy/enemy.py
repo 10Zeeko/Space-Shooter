@@ -3,6 +3,7 @@ from ..game_config.debug import *
 from ..player.bullet import *
 from ..player.power_ups import *
 from ..game_systems.effects_manager import *
+from ..game_systems.effects_manager import *
 
 def create_enemy(enemy_type, x, y):
     if enemy_type not in ENEMY_SPRITES:
@@ -90,16 +91,16 @@ def update_enemies(enemies, delta, screen, _player, bullets):
         else:
             enemy_update(enemy_object, delta, screen, _player, bullets)
 
-def enemy_hit(enemy, enemies, power_ups):
+def enemy_hit(enemy, enemies, power_ups, effects):
     enemy['hp'] -= 1
     blink(enemy, (255, 0, 0), 1, 150)
     if enemy['hp'] == 0:
-        # 10% chance to drop a power-up
+        create_effect(enemy, effects)
+        # 30% chance to drop a power-up
         if random.random() < 0.3:
             # Choose a random power-up type
             power_up_type = random.choice([0, 1, 2, 3])
             print (power_up_type)
-            # Create the power-up at the enemy's position
             new_power_up = create_power_up(power_up_type, enemy['x'], enemy['y'])
             power_ups.append(new_power_up)
         enemies.remove(enemy)

@@ -24,12 +24,19 @@ def create_player():
     player['sprites'] = player['idle']
     player['hitbox'] = pygame.Rect(player['x'] + 35, player['y'] + 5, 29, 95)
     player['pick_hitbox'] = PLAYER_IDLE.get_rect(topleft=(player['x'], player['y']))
+    player['shield_sprites'] = SHIELD_SPRITE
     return player
 
 def draw_player(screen, player):
     sprite = player['sprites']
     square = sprite.get_rect().move(player['x'], player['y'])
     screen.blit(sprite, square)
+
+    # Draw the shield if it's active
+    if player['shield']:
+        shield_sprite = player['shield_sprite']
+        shield_square = shield_sprite.get_rect().move(player['x'] - 20, player['y'] - 20)
+        screen.blit(shield_sprite, shield_square)
 
     # Draw player hitbox for debugging
     if get_debug_toggle():
@@ -77,6 +84,7 @@ def move_player(player, delta, bullets):
 def player_update(player, delta, screen, bullets):
     move_player(player, delta, bullets)
     update_effects_game_object(player)
+    update_shield(player)
     draw_player(screen, player)
     return player['alive'] # Player is still alive
 
@@ -100,7 +108,25 @@ def activate_power_up(player, power_up):
         pygame.time.set_timer(pygame.USEREVENT + 2, 6000)
     elif power_up_type == 2:  # Shield
         player['shield'] = True
-        add_shield(player, 10)
+        add_shield(player)
     elif power_up_type == 3:  # Double laser
         player['double_laser'] = True
         pygame.time.set_timer(pygame.USEREVENT + 3, 4000)
+
+def add_shield(player):
+    player['shield'] = True
+    player['shield_sprite'] = player['shield_sprites'][0]
+    player['shield_start_time'] = pygame.time.get_ticks()
+    player['shield_animation_done'] = False
+
+def update_shield(player):
+    # If the shield is active, update the shield sprite
+    if player['shield'] and not player['shield_animation_done']:
+        elapsed_time = pygame.time.get_ticks() - player['shield_start_time']
+        sprite_index = int((elapsed_time / 1000) * len(player['shield_sprites']))
+        if sprite_index < len(player['shield_sprites']):
+            player['shield_sprite'] = player['shield_sprites'][sprite_index]
+        else:
+            # If the last sprite has been displayed, stop the animation
+            player['shield_animation_done'] = True
+            player['shield_sprite'] = player['shield_sprites'][2]
