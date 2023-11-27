@@ -19,6 +19,11 @@ def return_enemy_wave(wave_round):
             [4, 4, 1, 1, 4, 4],
             [3, 4, 4, 4, 4, 3],
             [4, 4, 4, 4, 4, 4]
+        ],
+        [
+            [4, 4, 1, 1, 4, 4],
+            [2, 4, 4, 4, 4, 2],
+            [4, 4, 1, 1, 4, 4]
         ]
     ]
     return enemy_wave[wave_round]

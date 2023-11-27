@@ -98,3 +98,8 @@ POWER_UP_PICK_SOUND = pygame.mixer.Sound('assets/sounds/power_up_pick.ogg')
 POWER_UP_PICK_SOUND.set_volume(0.5)
 POWER_UP_DROP_SOUND = pygame.mixer.Sound('assets/sounds/power_up_lose.ogg')
 POWER_UP_DROP_SOUND.set_volume(0.5)
+
+MAIN_MENU_LOOP = pygame.mixer.Sound('assets/sounds/main_menu_loop.ogg')
+SPACE_LOOP = pygame.mixer.Sound('assets/sounds/space_loop.ogg')
+GAME_OVER_LOOP = pygame.mixer.Sound('assets/sounds/game_over_loop.ogg')
+WIN_LOOP = pygame.mixer.Sound('assets/sounds/win_loop.ogg')

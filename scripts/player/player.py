@@ -93,7 +93,7 @@ def player_hit(player):
     player['lives'] -= 1
     blink(player, (90, 30, 30), 2, 150)
     if player['lives'] == 0:
-        print("Game Over")  # Player has no lives left
+        player['alive'] = False  # Player has no lives left
 
 def add_points_to_score(player, points):
     player['score'] += points
