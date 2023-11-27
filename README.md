@@ -34,10 +34,10 @@ The game has animations that make it more dynamic, such as explosions when you d
 All assets used in this game were obtained from Kenney. https://www.kenney.nl/
 
 ## Screenshoots
-![alt text](https://github.com/10Zeeko/Space-Shooter/blob/main/assets/screenhots/Screenshot_1.png)
-![alt text](https://github.com/10Zeeko/Space-Shooter/blob/main/assets/screenhots/Screenshot_2.png)
-![alt text](https://github.com/10Zeeko/Space-Shooter/blob/main/assets/screenhots/Screenshot_3.png)
-![alt text](https://github.com/10Zeeko/Space-Shooter/blob/main/assets/screenhots/Screenshot_4.png)
+![alt text](https://github.com/10Zeeko/Space-Shooter/blob/main/assets/screenshots/Screenshot_1.png)
+![alt text](https://github.com/10Zeeko/Space-Shooter/blob/main/assets/screenshots/Screenshot_2.png)
+![alt text](https://github.com/10Zeeko/Space-Shooter/blob/main/assets/screenshots/Screenshot_3.png)
+![alt text](https://github.com/10Zeeko/Space-Shooter/blob/main/assets/screenshots/Screenshot_4.png)
 
 ## Credits
 This game was created by Pol Garriga.
