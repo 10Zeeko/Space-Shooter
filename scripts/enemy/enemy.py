@@ -59,6 +59,7 @@ def enemy_update(enemy, delta, screen, player, bullets):
 
     # Make the enemy shoot bullets
     if time.time() - enemy['bullet_cooldown'] >= 1 and enemy['y'] > 30:
+        ENEMY_SOUND.play()
         match enemy['enemy_type']:
             case 2:
                 create_enemy_bullet(enemy, 45, bullets)

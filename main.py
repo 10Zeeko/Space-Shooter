@@ -25,16 +25,16 @@ def handle_events(player1):
             return False
         elif event.type == pygame.USEREVENT + 1:
             player1['invincible'] = False
-            print ("No more invincibility")
-            pygame.time.set_timer(pygame.USEREVENT + 1, 0)  # Stop the timer
+            POWER_UP_DROP_SOUND.play()
+            pygame.time.set_timer(pygame.USEREVENT + 1, 0)
         elif event.type == pygame.USEREVENT + 2:
             player1['speed_boost'] = False
-            print ("No more speed")
-            pygame.time.set_timer(pygame.USEREVENT + 2, 0)  # Stop the timer
+            POWER_UP_DROP_SOUND.play()
+            pygame.time.set_timer(pygame.USEREVENT + 2, 0)
         elif event.type == pygame.USEREVENT + 3:
             player1['double_laser'] = False
-            print ("No more laser")
-            pygame.time.set_timer(pygame.USEREVENT + 3, 0)  # Stop the timer
+            POWER_UP_DROP_SOUND.play()
+            pygame.time.set_timer(pygame.USEREVENT + 3, 0)
     return True
 
 def main():

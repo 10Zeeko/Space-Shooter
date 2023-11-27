@@ -87,3 +87,14 @@ EXPLOSION_SPRITES = {
     7: pygame.transform.scale(pygame.image.load('assets/explosions/regularExplosion07.png'), (64, 64)),
     8: pygame.transform.scale(pygame.image.load('assets/explosions/regularExplosion08.png'), (64, 64)),
 }
+pygame.mixer.init()
+
+LASER_SOUND = pygame.mixer.Sound('assets/sounds/laser.ogg')
+LASER_SOUND.set_volume(0.5)
+ENEMY_SOUND = pygame.mixer.Sound('assets/sounds/enemy_laser.ogg')
+ENEMY_SOUND.set_volume(0.25)
+EXPLOSION_SOUND = pygame.mixer.Sound('assets/sounds/explosion.ogg')
+POWER_UP_PICK_SOUND = pygame.mixer.Sound('assets/sounds/power_up_pick.ogg')
+POWER_UP_PICK_SOUND.set_volume(0.5)
+POWER_UP_DROP_SOUND = pygame.mixer.Sound('assets/sounds/power_up_lose.ogg')
+POWER_UP_DROP_SOUND.set_volume(0.5)

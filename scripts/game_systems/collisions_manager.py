@@ -49,6 +49,7 @@ def remove_bullet(bullets, bullet):
 def handle_damage_player(player):
     if player['shield']:
         player['shield'] = False
+        POWER_UP_DROP_SOUND.play()
     elif player['invincible']:
         pass
     else:

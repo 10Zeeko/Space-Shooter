@@ -62,6 +62,7 @@ def move_player(player, delta, bullets):
         if now - player['bullet_cooldown'] >= BULLET_COOLDOWN:
             player['bullet_cooldown'] = pygame.time.get_ticks()
             player_bullet = bullet.create_bullet(player['x'] + 45.5, player['y'] - 18.5, 0)
+            LASER_SOUND.play()
             player_bullet['angle'] = 0
             # If the double laser power-up is active, create an additional bullet
             if player.get('double_laser', False):
@@ -99,6 +100,7 @@ def add_points_to_score(player, points):
 
 def activate_power_up(player, power_up):
     power_up_type = power_up['power_up_type']
+    POWER_UP_PICK_SOUND.play()
     if power_up_type == 0:  # Invincibility
         player['invincible'] = True
         blink(player, (20, 90, 90), 3, 1000)

@@ -8,6 +8,7 @@ def create_effect(game_object, effects):
         'y': game_object['y'] +20,
         'start_time': pygame.time.get_ticks(),
     }
+    EXPLOSION_SOUND.play()
     effects.append(effect)
 
 def explosion_update(effects):
